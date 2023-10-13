@@ -1,0 +1,22 @@
+<div>
+  <form (submit)="onSubmit()">
+    <div class="form-group w-25 m-auto mt-5 align-items-center">
+      <label for="inputField">Input Field</label>
+      <input
+        type="text"
+        id="inputField"
+        [(ngModel)]="inputData"
+        name="inputField"
+        class="form-control"
+        required
+      />
+      <div *ngIf="urlForm.get('url')?.hasError('pattern')">
+        Invalid URL format. It must start with 'http://' or 'https://'.
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mt-3">Submit</button>
+    </div>
+  </form>
+  <div *ngIf="response">
+    <p>Response from Laravel: {{ response.message }}</p>
+  </div>
+</div>
