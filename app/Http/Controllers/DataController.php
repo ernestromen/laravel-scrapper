@@ -3,28 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MyMongoModel;
+use App\Models\Urls;
+use MongoDB\Client;
 
 class DataController extends Controller
 {
-// app/Http/Controllers/DataController.php
+
     public function index()
     {
+        echo '<pre>';
+        $result = Urls::all();
+        var_dump($result);
+        die;
         $data = ['message' => 'This is your Laravel API data'];
         return response()->json($data);
     }
 
-    public function postData(Request $request)
-    {
-        var_dump($request->all());
-        die;
-        // Get the input data from the request
-        $inputData = $request->input('inputField');
 
-        // Process the data or save it to the database
+    public function showUrls(){
         
-        // You can return a response or data if needed
-        $data = ['message' => 'Data received from Angular: ' . $inputData];
-        return response()->json($data);
+        $result = Urls::all();
+        return response()->json($result);
+
     }
 
+    public function postData(Request $request)
+    {
+
+        $inputData = $request->input('inputField');
+        Urls::create([$inputData]);
+
+        $data = ['message' => 'Data received from Angular: ' . $inputData];
+        return response()->json($data);    }
 }
