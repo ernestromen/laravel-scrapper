@@ -3,28 +3,103 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\MyMongoModel;
+use App\Models\Urls;
+use Goutte\Client;
 
 class DataController extends Controller
 {
-// app/Http/Controllers/DataController.php
-    public function index()
+
+    public function scrapData(Request $request)
     {
-        $data = ['message' => 'This is your Laravel API data'];
+        $inputData = $request->input('scrapURL');
+
+        $client = new Client();
+        $tagsToScrap = ['h1','h2','h3','h4','a','li','p','article','div'];
+        $scrapedData = [];
+
+        try{
+
+            $crawler = $client->request('GET',$inputData);
+            $checkForIncapsula = $client->request('GET',$inputData)->text();
+
+            if (strpos($checkForIncapsula, "Incapsula incident") !== false || $checkForIncapsula == '') {
+
+                return response()->json(['error'=>'Scrap blocked by Incapsula']);
+
+            }
+            
+
+            foreach($tagsToScrap as $tag){
+              
+                if($crawler->filter($tag)->count() > 0){
+
+                    if($crawler->filter($tag)->count() > 1){
+                           
+                        if($tag =='a'){
+                            $tagToBeAdded = $crawler->filter($tag)->each(function ($node) {      
+
+                                return $node->attr('href');
+                            });
+
+                        }else{
+                            $tagToBeAdded = $crawler->filter($tag)->each(function ($node) {                                
+                                return $node->text();
+                            });                            
+                        }      
+                          
+                            $scrapedData[$tag] = $tagToBeAdded;
+
+                        }else{
+
+                            $tagToBeAdded = $tag == 'a' ? $crawler->filter($tag)->attr('href') : $crawler->filter($tag)->text();
+                            $scrapedData[$tag] = $tagToBeAdded;
+                        }
+                    }
+                }
+
+                    $data = [$scrapedData];
+
+            } catch (\Exception $e) {
+                $data = ['message' => $e->getMessage()];
+
+                }
         return response()->json($data);
     }
+
+    public function showUrls(){
+        
+        $result = Urls::all();
+        return response()->json($result);
+
+    }
+
 
     public function postData(Request $request)
     {
-        var_dump($request->all());
-        die;
-        // Get the input data from the request
+    
+    try {
+        $client = new Client();
         $inputData = $request->input('inputField');
-
-        // Process the data or save it to the database
-        
-        // You can return a response or data if needed
-        $data = ['message' => 'Data received from Angular: ' . $inputData];
+        $crawler = $client->request('GET',$inputData);
+        $URLExists = Urls::where('name',$inputData)->first() ? $inputData : null;
+        $data = $this->urlCheckIfExists($URLExists,$inputData);
         return response()->json($data);
+
+    } catch (\Exception $e) {
+
+        return response()->json(['message'=>$e->getMessage()]);
+        }
     }
 
+
+    public function urlCheckIfExists($URLExists,$inputData){
+        if(is_null($URLExists)){
+            Urls::create(["name"=>$inputData]);
+            $data = ['message' => 'URL added!'];
+        }else if($URLExists == $inputData){
+            $data = ['message' => 'URL already exists in database!'];
+        }
+        return $data;
+    }
 }
