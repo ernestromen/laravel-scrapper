@@ -22,14 +22,12 @@ class DataController extends Controller
 
             $crawler = $client->request('GET',$inputData);
             $checkForIncapsula = $client->request('GET',$inputData)->text();
-
+      
             if (strpos($checkForIncapsula, "Incapsula incident") !== false || $checkForIncapsula == '') {
 
                 return response()->json(['error'=>'Scrap blocked by Incapsula']);
-
             }
             
-
             foreach($tagsToScrap as $tag){
               
                 if($crawler->filter($tag)->count() > 0){
@@ -62,8 +60,10 @@ class DataController extends Controller
 
             } catch (\Exception $e) {
                 $data = ['message' => $e->getMessage()];
-
                 }
+
+            if(count($scrapedData) == 0) return response()->json(['error'=>'Nodes are empty']);
+ 
         return response()->json($data);
     }
 
@@ -92,7 +92,18 @@ class DataController extends Controller
         }
     }
 
+    public function deleteUrl($id){
 
+        try{
+            $url = Urls::find($id);
+          $url = Urls::where('_id', $id)->delete();
+
+        }catch (\Exception $e) {
+            $data = ['error' => $e->getMessage()];
+        }
+        return redirect()->back();
+    }
+    0
     public function urlCheckIfExists($URLExists,$inputData){
         if(is_null($URLExists)){
             Urls::create(["name"=>$inputData]);

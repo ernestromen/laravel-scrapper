@@ -21,8 +21,6 @@ export class AppComponent {
     'X-XSRF-TOKEN': 'your-csrf-token-value-another-one' // Replace with your actual CSRF token
   });
 
-
-
   constructor(private http: HttpClient) { }
 
   displayError(errorText: string) {
@@ -41,10 +39,9 @@ export class AppComponent {
 
     this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/scrap', data, { headers: this.headers }).subscribe(
       (response : any) => {
-        // console.log(response.error,'re');
-        if(response.error){
-          this.displayError(response?.error);
-        } 
+
+        if(response.error) this.displayError(response?.error);
+
         this.scrapedDataList = response;
       },
       (error) => {
@@ -68,7 +65,6 @@ export class AppComponent {
 
         this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/', data, { headers: this.headers }).subscribe(
           (response) => {
-            console.log(response);
             this.response = response;
 
             let name = this.inputData;
