@@ -1,4 +1,5 @@
 <div>
+<<<<<<< HEAD
 	<form (submit)="onSubmit()">
 		<div class="form-group  m-auto mt-5 align-items-center  align-items-center"
 			style="width:32%;">
@@ -154,4 +155,59 @@
 
 		</div>
 	</div>
+=======
+  <form (submit)="onSubmit()">
+    <div class="form-group  m-auto mt-5 align-items-center  align-items-center" style="width:32%;">
+      <label for="inputField">Input Field</label>
+      <input
+        type="text"
+        id="inputField"
+        [(ngModel)]="inputData"
+        name="inputField"
+        class="form-control"
+        required="required"
+      />
+      <div *ngIf="invalidUrl" class="bg-danger  text-light fw-bold text-center pt-3 pb-3 mt-3">
+        Invalid URL format. It must start with 'http://' or 'https://'<br>
+        and end with an extension
+      </div>
+      <button type="submit" class="btn btn-primary w-100 mt-3" >Submit</button>
+    </div>
+  </form>
+ 
+  <div class="bg-success m-auto mt-5 pt-3 pb-2 text-light fw-bold text-center align-items-center"  style="width:35%; padding-bottom: 4px;"*ngIf="response">
+    <p>Response from Laravel: {{ response.message }}</p>
+  </div>
+
+  <div *ngIf="response"></div>
+<ng-template #thenBlock>
+  <div>This div is displayed when the condition is true.</div>
+</ng-template>
+<ng-template #elseBlock>
+  <div class="bg-success">This div is displayed when the condition is false.</div>
+</ng-template>
+
+
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>URLS</th>
+              <!-- Add more table headers as needed -->
+            </tr>
+          </thead>
+          <tbody>
+            <tr  *ngFor="let item of urlList">
+              <td><a href="{{ item[0] }}">{{ item[0] }}</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+
+>>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
 </div>
