@@ -12,11 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-<<<<<<< HEAD
         '/',
         '/scrap'
-=======
-        '/'
->>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
     ];
 }

@@ -5,16 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\MyMongoModel;
 use App\Models\Urls;
-<<<<<<< HEAD
 use Goutte\Client;
-=======
-use MongoDB\Client;
->>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
 
 class DataController extends Controller
 {
 
-<<<<<<< HEAD
     public function scrapData(Request $request)
     {
         $inputData = $request->input('scrapURL');
@@ -72,7 +67,6 @@ class DataController extends Controller
         return response()->json($data);
     }
 
-=======
     public function index()
     {
         echo '<pre>';
@@ -84,13 +78,11 @@ class DataController extends Controller
     }
 
 
->>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
     public function showUrls(){
         
         $result = Urls::all();
         return response()->json($result);
 
-<<<<<<< HEAD
     }
 
 
@@ -122,7 +114,7 @@ class DataController extends Controller
         }
         return redirect()->back();
     }
-    0
+
     public function urlCheckIfExists($URLExists,$inputData){
         if(is_null($URLExists)){
             Urls::create(["name"=>$inputData]);
@@ -132,16 +124,4 @@ class DataController extends Controller
         }
         return $data;
     }
-=======
-    }
-
-    public function postData(Request $request)
-    {
-
-        $inputData = $request->input('inputField');
-        Urls::create([$inputData]);
-
-        $data = ['message' => 'Data received from Angular: ' . $inputData];
-        return response()->json($data);    }
->>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
 }

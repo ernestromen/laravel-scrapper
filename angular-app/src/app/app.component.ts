@@ -1,9 +1,5 @@
 import { Component } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-<<<<<<< HEAD
-=======
-import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
->>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
 
 @Component({
   selector: 'app-root',
@@ -14,7 +10,6 @@ import { FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/fo
 export class AppComponent {
   inputData: string = '';
   response: any;
-<<<<<<< HEAD
   urlList: any[] = [];
   tldList: any[] = [];
   scrapedDataList: any[] = [];
@@ -25,6 +20,8 @@ export class AppComponent {
   headers = new HttpHeaders({
     'X-XSRF-TOKEN': 'your-csrf-token-value-another-one' // Replace with your actual CSRF token
   });
+
+
 
   constructor(private http: HttpClient) { }
 
@@ -39,13 +36,18 @@ export class AppComponent {
 
   submitScrap(scrapURL: string) {
 
+    const headers = new HttpHeaders({
 
+      'X-XSRF-TOKEN': 'your-csrf-token-value-for-real-time-time-time-time' // Replace with your actual CSRF token
+    });
     const data = { scrapURL };
 
-    this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/scrap', data, { headers: this.headers }).subscribe(
-      (response : any) => {
+    this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/scrap', data, { headers: headers }).subscribe(
+      (response: any) => {
 
-        if(response.error) this.displayError(response?.error);
+        if (response?.error) {
+          this.displayError(response.error);
+        }
 
         this.scrapedDataList = response;
       },
@@ -70,6 +72,7 @@ export class AppComponent {
 
         this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/', data, { headers: this.headers }).subscribe(
           (response) => {
+            console.log(response);
             this.response = response;
 
             let name = this.inputData;
@@ -113,6 +116,7 @@ export class AppComponent {
 
   fetchDataUrls() {
 
+
     this.http.get<any[]>('https://localhost/laravel-scrapper/public/urls', { headers: this.headers }).subscribe(
       (data) => {
 
@@ -135,116 +139,9 @@ export class AppComponent {
       }
     );
   }
-}
-
-
-=======
-  urlForm: FormGroup;
-  urlList: any[] = [];
-  tldList: any[] = [];
-  newUrl: string = '';
-  invalidUrl: boolean = false;
-  inputValid: boolean = false;
-
-  constructor(private http: HttpClient, private fb: FormBuilder) {
-    this.urlForm = this.fb.group({
-      url: ['', [Validators.required]],
-    });
-  }
-
-
-
-  displayError() {
-    this.invalidUrl = true;
-    setTimeout(() => {
-      this.invalidUrl = false;
-    }, 1500);
-  }
-
-
-handleSubmit(inputData:string){
-
-  if (inputData.split('https')[0] === '' || inputData.split('http')[0] || inputData.split('www')[0] && inputData.includes('.')) {
-
-    let siteExtension = inputData.split('.')[inputData.split('.').length - 1].toUpperCase();
-
-    if (this.tldList.includes(siteExtension)) {
-
-
-      const data = { inputField: inputData };
-
-      const headers = new HttpHeaders({
-        'X-XSRF-TOKEN': 'your-csrf-token-value' // Replace with your actual CSRF token
-      });
-
-      this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/', data, { headers: headers }).subscribe(
-        (response) => {
-          this.response = response;
-          this.urlList.push({ 0: this.inputData });
-          setTimeout(() => {
-            this.response = '';
-          }, 1500);
-        },
-        (error) => {
-          console.error('Error:', error);
-        }
-      );
-    } else {
-
-      this.displayError();
-    }
-  } else {
-    this.displayError();
-  }
 
 }
 
 
-  onSubmit() {
-    this.handleSubmit(this.inputData);
-  }
-
-  ngOnInit() {
-    this.fetchData();
-  }
-
-  fetchData() {
-
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-
-    this.http.get<any[]>('https://localhost/laravel-scrapper/public/urls', { headers }).subscribe(
-      (data) => {
-
-        this.urlList = data;
-        this.inputData = '';
-        // console.log(this.urlList, 'yes');
-
-      },
-      (error) => {
-        console.error('Error:', error);
-      }
-    );
-
-
-    this.http.get<any[]>('../assets/tldsList.json').subscribe(
-      (data) => {
-        // Handle the data here
-        // console.log(data);
-        this.tldList = data;
-        // console.log(this.tldList, 'tldList');
-      },
-      (error) => {
-        console.error('Error:', error);
-      }
-    );
-  }
-
-}
-
-
->>>>>>> dbba7b293fbb86038ada2148d8ec1ad7d69877ee
 
 
