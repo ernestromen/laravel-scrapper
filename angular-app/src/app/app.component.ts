@@ -72,13 +72,11 @@ export class AppComponent {
 
         this.http.post<any[]>('http://127.0.0.1/laravel-scrapper/public/', data, { headers: this.headers }).subscribe(
           (response) => {
-            console.log(response);
+
             this.response = response;
 
-            let name = this.inputData;
-
             if (this.response.message == 'URL added!') {
-              this.urlList.push({ name: inputData });
+              this.urlList.push({ name: inputData, _id: this.response.lastInsertedId});
               this.inputData = '';
             }
 
@@ -115,16 +113,15 @@ export class AppComponent {
   }
 
   fetchDataUrls() {
-
-
-    this.http.get<any[]>('https://localhost/laravel-scrapper/public/urls', { headers: this.headers }).subscribe(
+    
+    this.http.get<any[]>('http://localhost/laravel-scrapper/public/urls', { headers:this.headers }).subscribe(
       (data) => {
-
+        
         this.urlList = data;
         this.inputData = '';
       },
       (error) => {
-        this.displayError(error.message);
+                this.displayError(error.message);
       }
     );
   }

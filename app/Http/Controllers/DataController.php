@@ -69,10 +69,7 @@ class DataController extends Controller
 
     public function index()
     {
-        echo '<pre>';
         $result = Urls::all();
-        var_dump($result);
-        die;
         $data = ['message' => 'This is your Laravel API data'];
         return response()->json($data);
     }
@@ -107,7 +104,7 @@ class DataController extends Controller
 
         try{
             $url = Urls::find($id);
-          $url = Urls::where('_id', $id)->delete();
+            $url = Urls::where('_id', $id)->delete();
 
         }catch (\Exception $e) {
             $data = ['error' => $e->getMessage()];
@@ -117,8 +114,9 @@ class DataController extends Controller
 
     public function urlCheckIfExists($URLExists,$inputData){
         if(is_null($URLExists)){
-            Urls::create(["name"=>$inputData]);
-            $data = ['message' => 'URL added!'];
+           $url =  Urls::create(["name"=>$inputData]);
+           $lastInsertedId = $url->id;
+            $data = ['message' => 'URL added!','lastInsertedId'=>$lastInsertedId];
         }else if($URLExists == $inputData){
             $data = ['message' => 'URL already exists in database!'];
         }
